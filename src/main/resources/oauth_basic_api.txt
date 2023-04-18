@@ -1,0 +1,14 @@
+## For login
+curl --location --request POST 'http://localhost:8083/auth/oauth/token' \
+--header 'Authorization: Basic QVBQOlVzZXJAMTIz' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'username=harsh_shah' \
+--data-urlencode 'password=Harsh@123'
+
+## For generate access token using refreshToken
+curl --location --request POST 'http://localhost:8083/auth/oauth/token' \
+--header 'Authorization: Basic QVBQOlVzZXJAMTIz' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=refresh_token' \
+--data-urlencode 'refresh_token=yehRabz6GB2cSdqAAYbcDzdMeQU'
