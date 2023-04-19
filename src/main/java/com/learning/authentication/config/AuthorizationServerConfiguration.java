@@ -1,6 +1,7 @@
 package com.learning.authentication.config;
 
 import com.learning.authentication.custom.response.CustomTokenEnhancer;
+import com.learning.authentication.failed.attempt.CustomWebResponseExceptionTranslator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,12 +28,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private final DataSource dataSource;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator;
 
-    public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder, DataSource dataSource, AuthenticationManager authenticationManager, UserDetailsService userDetailsService){
+    public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder, DataSource dataSource, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator){
       this.passwordEncoder = passwordEncoder;
       this.dataSource = dataSource;
       this.authenticationManager = authenticationManager;
       this.userDetailsService = userDetailsService;
+      this.customWebResponseExceptionTranslator = customWebResponseExceptionTranslator;
     }
 
     @Bean
@@ -62,6 +65,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .tokenEnhancer(tokenEnhancer());
         endpoints.tokenGranter(tokenGranter(endpoints));
         endpoints.userDetailsService(userDetailsService);
+        endpoints.exceptionTranslator(customWebResponseExceptionTranslator);
     }
 
 }

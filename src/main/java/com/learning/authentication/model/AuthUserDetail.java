@@ -89,4 +89,9 @@ public class AuthUserDetail extends User implements UserDetails {
     public long getId() {
         return super.getId();
     }
+
+    @Override
+    public int getFailedAttempt() {
+        return super.getFailedAttempt();
+    }
 }

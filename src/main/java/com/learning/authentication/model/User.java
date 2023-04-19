@@ -45,6 +45,8 @@ public class User implements Serializable {
 
     private String mfaSecret;
 
+    private int failedAttempt;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="role_user" ,
             joinColumns = {@JoinColumn(name = "user_id" ,referencedColumnName = "id")},
@@ -64,6 +66,7 @@ public class User implements Serializable {
         this.credentialsNonExpired = user.credentialsNonExpired;
         this.mfaSecret = user.mfaSecret;
         this.roles = user.getRoles();
+        this.failedAttempt=user.failedAttempt;
     }
 
 }
