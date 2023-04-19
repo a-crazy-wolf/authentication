@@ -1,5 +1,6 @@
 package com.learning.authentication.config;
 
+import com.learning.authentication.custom.response.CustomTokenEnhancer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
@@ -49,9 +51,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         return new CompositeTokenGranter(granters);
     }
 
+    @Bean
+    public TokenEnhancer tokenEnhancer(){
+        return new CustomTokenEnhancer();
+    }
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints){
-        endpoints.tokenStore(jdbcTokenStore());
+        endpoints.tokenStore(jdbcTokenStore())
+                .tokenEnhancer(tokenEnhancer());
         endpoints.tokenGranter(tokenGranter(endpoints));
         endpoints.userDetailsService(userDetailsService);
     }

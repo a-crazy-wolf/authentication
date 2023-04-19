@@ -1,7 +1,9 @@
 package com.learning.authentication.model;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,7 +33,7 @@ public class User implements Serializable {
 
     private String password;
 
-    private Integer user_type;
+    private Integer userType;
 
     private boolean enabled;
 
@@ -55,7 +57,7 @@ public class User implements Serializable {
         this.username = user.emailId;
         this.emailId = user.emailId;
         this.password = user.password;
-        this.user_type = user.user_type;
+        this.userType = user.userType;
         this.enabled = user.enabled;
         this.accountNonExpired = user.accountNonExpired;
         this.accountNonLocked = user.accountNonLocked;

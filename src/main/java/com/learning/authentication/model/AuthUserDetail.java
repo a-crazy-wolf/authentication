@@ -56,8 +56,8 @@ public class AuthUserDetail extends User implements UserDetails {
     }
 
     @Override
-    public Integer getUser_type() {
-        return super.getUser_type();
+    public Integer getUserType() {
+        return super.getUserType();
     }
 
     @Override
