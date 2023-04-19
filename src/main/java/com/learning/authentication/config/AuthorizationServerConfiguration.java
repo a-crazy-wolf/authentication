@@ -1,5 +1,6 @@
 package com.learning.authentication.config;
 
+import com.learning.authentication.custom.response.CustomAccessTokenConverter;
 import com.learning.authentication.custom.response.CustomTokenEnhancer;
 import com.learning.authentication.failed.attempt.CustomWebResponseExceptionTranslator;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
@@ -48,6 +50,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
     }
 
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception{
+        security.checkTokenAccess("permitAll()").tokenKeyAccess("permitAll()");
+    }
+
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints){
         List<TokenGranter> granters = new ArrayList<TokenGranter>(Arrays.asList(endpoints.getTokenGranter()));
         granters.add(new PasswordTokenGranter(endpoints,authenticationManager));
@@ -62,6 +69,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints){
         endpoints.tokenStore(jdbcTokenStore())
+                .accessTokenConverter(new CustomAccessTokenConverter())
                 .tokenEnhancer(tokenEnhancer());
         endpoints.tokenGranter(tokenGranter(endpoints));
         endpoints.userDetailsService(userDetailsService);
