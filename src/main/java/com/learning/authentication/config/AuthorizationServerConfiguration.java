@@ -3,6 +3,8 @@ package com.learning.authentication.config;
 import com.learning.authentication.custom.response.CustomAccessTokenConverter;
 import com.learning.authentication.custom.response.CustomTokenEnhancer;
 import com.learning.authentication.failed.attempt.CustomWebResponseExceptionTranslator;
+import com.learning.authentication.mfa.MfaTokenGranter;
+import com.learning.authentication.service.MfaService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,13 +33,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator;
+    private final MfaService mfaService;
 
-    public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder, DataSource dataSource, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator){
+    public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder, DataSource dataSource, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator, MfaService mfaService){
       this.passwordEncoder = passwordEncoder;
       this.dataSource = dataSource;
       this.authenticationManager = authenticationManager;
       this.userDetailsService = userDetailsService;
       this.customWebResponseExceptionTranslator = customWebResponseExceptionTranslator;
+      this.mfaService = mfaService;
     }
 
     @Bean
@@ -57,7 +61,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints){
         List<TokenGranter> granters = new ArrayList<TokenGranter>(Arrays.asList(endpoints.getTokenGranter()));
-        granters.add(new PasswordTokenGranter(endpoints,authenticationManager));
+        granters.add(new PasswordTokenGranter(endpoints,authenticationManager,mfaService));
+        granters.add(new MfaTokenGranter(endpoints,authenticationManager,mfaService));
         return new CompositeTokenGranter(granters);
     }
 

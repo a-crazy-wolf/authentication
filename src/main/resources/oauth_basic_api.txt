@@ -12,3 +12,32 @@ curl --location --request POST 'http://localhost:8083/auth/oauth/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'grant_type=refresh_token' \
 --data-urlencode 'refresh_token=yehRabz6GB2cSdqAAYbcDzdMeQU'
+
+
+NOTE : For MFA must use client who have grant_type as MFA, also add mfa_secret for that user
+## For MFA login step 1
+curl --location --request POST 'http://localhost:8083/auth/oauth/token' \
+--header 'Authorization: Basic QURNSU46QWRtaW5AMTIz' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'username=Foram@maildrop.cc' \
+--data-urlencode 'password=Foram@123'
+
+response :
+{
+    "error": "mfa_required",
+    "error_description": "Multi-factor authentication required",
+    "barCodeUrl": "otpauth://totp/learning%3Aforam%40maildrop.cc?secret=7YUUOMDLHMMI2FP5XHGDRI3YOJX5CDYI&issuer=learning",
+    "mfa_token": "MEf26Bjt1j5q1XBKwabPtlE1prM"
+}
+
+## MFA authentication code step 2
+// generate barcode through barCodeUrl using this website : https://www.qr-code-generator.com/
+// scan that code from google authenticator app (use that code as mfa_code)
+
+curl --location --request POST 'http://localhost:8083/auth/oauth/token' \
+--header 'Authorization: Basic QURNSU46QWRtaW5AMTIz' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=mfa' \
+--data-urlencode 'mfa_token=MEf26Bjt1j5q1XBKwabPtlE1prM' \
+--data-urlencode 'mfa_code=189912'

@@ -113,3 +113,7 @@ CREATE TABLE `permission_role` (
 
 #Add column in user table for maintain failed attempt
 ALTER TABLE users ADD COLUMN failed_attempt int(2);
+
+# Insert client_details like below
+INSERT INTO `oauth_client_details` (`client_id`,`resource_ids`,`client_secret`,`scope`,`authorized_grant_types`,`web_server_redirect_uri`,`authorities`,`access_token_validity`,`refresh_token_validity`,`additional_information`,`autoapprove`) VALUES ('ADMIN','user','{bcrypt}$2a$10$Pai9Ilnhg3tFVeu2F8yqLe9t7iI/SyfYr3dvI1vv/zAlP7XqXsE2W','READ,WRITE','password,refresh_token,mfa','http://localhost:8080/code','PRE_AUTH',1800,3600,'{}','true');
+INSERT INTO `oauth_client_details` (`client_id`,`resource_ids`,`client_secret`,`scope`,`authorized_grant_types`,`web_server_redirect_uri`,`authorities`,`access_token_validity`,`refresh_token_validity`,`additional_information`,`autoapprove`) VALUES ('APP','user','{bcrypt}$2a$10$DimcHPOLg.kaxBVDQeALMOO3lJEGV237/SfPz7qrmMTashQjZHGWq','READ,WRITE','password,refresh_token','http://localhost:8080/code',NULL,1800,3600,'{}','true');
