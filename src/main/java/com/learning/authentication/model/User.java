@@ -54,7 +54,7 @@ public class User implements Serializable {
     private List<Role> roles;
 
     public User(User user){
-        this.id = id;
+        this.id = user.id;
         this.firstName = user.firstName;
         this.username = user.emailId;
         this.emailId = user.emailId;

@@ -3,22 +3,19 @@ package com.learning.authentication.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
 @Data
-public class Permission {
+@Table(name = "permission")
+public class Permission implements Serializable {
+
+    private static final long serialVersionUID = -1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="permission_role" ,
-            joinColumns = {@JoinColumn(name = "permission_id" ,referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")})
-    private List<Role> roles;
 
 }
